@@ -1,10 +1,25 @@
 const express = require('express'); // importing a CommonJS module
 
+const morgan = require('morgan')
+
 const hubsRouter = require('./hubs/hubs-router.js');
 
 const server = express();
 
+function customMorgan( req, res, next) {
+  console.log(`you made a ${req.method} request`)
+  next();
+}
+
+function addFriend( req, res, next) {
+  req.friend='lady gaga';
+  next();
+}
+
 server.use(express.json());
+server.use(morgan('dev'))
+server.use(customMorgan)
+server.use(addFriend)
 
 server.use('/api/hubs', hubsRouter);
 
